@@ -4,43 +4,127 @@ session_start();
 
 require_once("vendor/autoload.php");
 
+// Rotas.
 use \Slim\Slim;
+
+// Página do site.
 use \Hcode\Page;
+
+// Página de admin.
 use \Hcode\PageAdmin;
+
+// Criar usuário.
 use \Hcode\Model\User;
 
 $app = new Slim();
 
 $app->config('debug', true);
 
+// Página inicial.
 $app->get('/', function() {
     $page = new Page();
+
+    // Template utilizado.
     $page->setTpl("index");
 });
 
+// Painel de admin.
 $app->get('/admin', function() {
+	// Verificar se esta logado e se tem permissão de admin.
 	User::verifyLogin();
+	// Painel do admin.
     $page = new PageAdmin();
+    // Template utilizado.
     $page->setTpl("index");
 });
 
+// Página de login.
 $app->get('/admin/login', function() {
+	// Os parametros são para não utilizar o header e footer padrão.
     $page = new PageAdmin([
     	"header"=>false,
     	"footer"=>false
     ]);
+    // Template utilizado.
     $page->setTpl("login");
 });
 
+// Página de verificar o login.
 $app->post('/admin/login', function() {
 	User::login($_POST["login"], $_POST["password"]);
 	header("Location: /admin");
 	exit;
 });
 
+// Sair
 $app->get('/admin/logout', function() {
 	User::logout();
 	header("Location: /admin/login");
+	exit;
+});
+
+// Admin visualizar todos os usuários.
+$app->get('/admin/users', function() {
+	User::verifyLogin();
+	$users = User::listAll();
+	$page = new PageAdmin();
+	$page->setTpl("users", array(
+		"users"=>$users
+	));
+});
+
+// Admin digitar dados do novo usuário.
+$app->get('/admin/users/create', function() {
+	User::verifyLogin();
+	$page = new PageAdmin();
+	$page->setTpl("users-create");
+});
+
+// Admin deletar um usuário.
+$app->get('/admin/users/:iduser/delete', function($iduser) {
+	User::verifyLogin();
+	$user = new User();
+	$user->get((int)$iduser);
+	$user->delete();
+	header("Location: /admin/users");
+	exit;
+});
+
+// Admin criar novos usuários.
+$app->post('/admin/users/create', function() {
+	User::verifyLogin();
+	$user = new User();
+	$_POST["inadmin"] = (isset($_POST["inadmin"])) ? 1 : 0;
+	// Gerar os setters
+	$user->setData($_POST);
+	// Procedure.
+	$user->save();
+	header("Location: /admin/users");
+	exit;
+});
+
+// Admin digitar novos dados de um usuário já existente.
+$app->get('/admin/users/:iduser', function($iduser) {
+	User::verifyLogin();
+	$user = new User();
+	$user->get((int)$iduser);
+	$page = new PageAdmin();
+	$page->setTpl("users-update", array(
+		"user"=>$user->getValues()
+	));
+});
+
+// Admin editar dados de um usuário já existente.
+$app->post('/admin/users/:iduser', function($iduser) {
+	User::verifyLogin();
+	$user = new User();
+
+	$_POST["inadmin"] = (isset($_POST["inadmin"])) ? 1 : 0;
+
+	$user->get((int)$iduser);
+	$user->setData($_POST);
+	$user->update();
+	header("Location: /admin/users");
 	exit;
 });
 
