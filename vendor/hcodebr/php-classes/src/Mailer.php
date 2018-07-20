@@ -58,7 +58,7 @@ class Mailer {
 
 		$this->mail->AltBody = 'Teste.';
 
-		function save_mail($this->mail)
+		function save_mail($mail)
 		{
 		    $path = "{imap.gmail.com:993/imap/ssl}[Gmail]/Sent Mail";
 
