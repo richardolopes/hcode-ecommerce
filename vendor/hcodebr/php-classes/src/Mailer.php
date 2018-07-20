@@ -32,6 +32,13 @@ class Mailer {
 
 		$this->mail = new \PHPMailer;
 		$this->mail->isSMTP();
+		$this->mail->SMTPOptions = array(
+		    'ssl' => array(
+		        'verify_peer' => false,
+		        'verify_peer_name' => false,
+		        'allow_self_signed' => true
+		    )
+		);
 		$this->mail->SMTPDebug = 0;
 		$this->mail->Debugoutput = 'html';
 		$this->mail->Host = 'smtp.gmail.com';
