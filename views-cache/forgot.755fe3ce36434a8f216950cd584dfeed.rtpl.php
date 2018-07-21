@@ -1,7 +1,7 @@
-<?php if(!class_exists('Rain\Tpl')){exit;}?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?php if(!class_exists('Rain\Tpl')){exit;}?><!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width" />
   <title>Airmail Ping</title>
   <style type="text/css">
@@ -402,14 +402,14 @@
                 <td>
                   <table class="soapbox">
                     <tr>
-                      <td class="soapbox-title">Recuperação de Senha</td>
+                      <td class="soapbox-title">Recupera&ccedil;&atilde;o de Senha</td>
                     </tr>
                   </table>
                   <table class="body">
                     <tr>
                       <td class="body-padding"></td>
                       <td class="body-padded">
-                        <div class="body-title">Olá <?php echo htmlspecialchars( $name, ENT_COMPAT, 'UTF-8', FALSE ); ?>,</div>
+                        <div class="body-title">Ol&aacute; <?php echo htmlspecialchars( $name, ENT_COMPAT, 'UTF-8', FALSE ); ?>,</div>
                         <table class="body-text">
                           <tr>
                             <td class="body-text-cell">
