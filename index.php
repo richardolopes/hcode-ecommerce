@@ -191,9 +191,9 @@ $app->get('/admin/categories', function() {
 	$categories = Category::listAll();
 
 	$page = new PageAdmin();
-	$page->setTpl("categories", [
+	$page->setTpl("categories", array(
 		"categories"=>$categories
-	]);
+	));
 });
 
 $app->get('/admin/categories/create', function() {
@@ -238,6 +238,16 @@ $app->post('/admin/categories/:idcategory', function($idcategory) {
 	$category->save();
 	header("Location: /admin/categories");
 	exit;
+});
+
+$app->get('/categories/:idcategory', function($idcategory) {
+	$category = new Category();
+	$category->get((int)$idcategory);
+	$page = new Page();
+	$page->setTpl("category", array(
+		"category"=>$category->getValues(),
+		"products"=>[]
+	));
 });
 
 $app->run();
