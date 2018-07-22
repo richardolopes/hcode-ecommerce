@@ -1,13 +1,16 @@
 <?php
 
 use \Hcode\Page;
+use \Hcode\Model\Product;
 
 // Página inicial.
 $app->get('/', function() {
-    $page = new Page();
+	$products = Product::listAll();
 
-    // Template utilizado.
-    $page->setTpl("index");
+    $page = new Page();
+    $page->setTpl("index", array(
+    	"products"=>Product::checkList($products)
+    ));
 });
 
 

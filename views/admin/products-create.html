@@ -52,7 +52,7 @@
             <div class="form-group">
               <label for="desurl">URL</label>
               <input type="text" class="form-control" id="desurl" name="desurl">
-            </div>
+            </div>           
           </div>
           <!-- /.box-body -->
           <div class="box-footer">
