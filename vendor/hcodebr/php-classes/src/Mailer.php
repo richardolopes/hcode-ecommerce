@@ -50,7 +50,7 @@ class Mailer {
 		$this->mail->setFrom(Mailer::USERNAME, Mailer::NAME_FROM);
 		$this->mail->addAddress($toAddress, $toName);
 		$this->mail->Subject = $subject;
-		$this->mail->msgHTML($html);
+		$this->mail->msgHTML(utf8_decode($html));
 		$this->mail->AltBody = 'This is a plain-text message body';
 	}
 
