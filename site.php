@@ -189,11 +189,7 @@ $app->post('/register', function() {
 	$user->save();
 	User::login($_POST["email"], $_POST["password"]);
 
-	$_SESSION["registerValues"] = [
-		"email"=>"",
-		"name"=>"",
-		"phone"=>""
-	];
+	unset($_SESSION["registerValues"]);
 
 	header("Location: /checkout");
 	exit;
