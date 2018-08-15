@@ -163,7 +163,7 @@ class User extends Model
 		));
 	}
 
-	public static function getForgot($email)
+	public static function getForgot($email, $inadmin = true)
 	{
 		$sql = new Sql();
 		$results = $sql->select("
@@ -196,8 +196,14 @@ class User extends Model
 				// Função mcrypt_encrypt() depreciada no PHP 7.1 -> openssl_encrypt()
 				$code = base64_encode(mcrypt_encrypt(MCRYPT_RIJNDAEL_128, User::SECRET, $dataRecovery["idrecovery"], MCRYPT_MODE_ECB));
 
-				$link = "http://www.ecommerce.com.br/admin/forgot/reset?code=$code";
-
+				if ($inadmin === true)
+				{
+					$link = "http://www.ecommerce.com.br/admin/forgot/reset?code=$code";
+				} 
+				else 
+				{
+					$link = "http://www.ecommerce.com.br/forgot/reset?code=$code";
+				}
 				$mailer = new Mailer($data["desemail"], $data["desperson"], "Redefinir senha", "forgot", array(
 					"name"=>$data["desperson"],
 					"link"=>$link
@@ -269,6 +275,11 @@ class User extends Model
 	public static function clearError()
 	{
 		$_SESSION[User::ERROR] = NULL;
+	}
+
+	public static function setErrorRegister($msg)
+	{
+		$_SESSION[User::ERROR_REGISTER] = $msg;
 	}
 
 	public static function getErrorRegister()
