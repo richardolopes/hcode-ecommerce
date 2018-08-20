@@ -202,7 +202,7 @@ $app->post('/checkout', function() {
 	$address->save();
 
 	$cart = Cart::getFromSession();
-	$totals = $cart->getCalculateTotal();
+	$cart->getCalculateTotal();
 
 	$order = new Order();
 	$order->setData(array(
@@ -210,7 +210,7 @@ $app->post('/checkout', function() {
 		"idaddress"=>$address->getidaddress(),
 		"iduser"=>$user->getiduser(),
 		"idstatus"=>OrderStatus::EM_ABERTO,
-		"vltotal"=>$totals['vlprice'] + $cart->getvlfreight()
+		"vltotal"=>$cart->getvltotal()
 	));
 	$order->save();
 
@@ -462,6 +462,35 @@ $app->get('/boleto/:idorder', function($idorder) {
 	$path = $_SERVER['DOCUMENT_ROOT'] . DIRECTORY_SEPARATOR . "res" . DIRECTORY_SEPARATOR . "boletophp" . DIRECTORY_SEPARATOR . "include" . DIRECTORY_SEPARATOR;
 	require_once($path . "funcoes_itau.php");
 	require_once($path . "layout_itau.php");
+});
+
+$app->get('/profile/orders', function() {
+	User::verifyLogin(false);
+
+	$user = User::getFromSession();
+
+	$page = new Page();
+	$page->setTpl("profile-orders", array(
+		"orders"=>$user->getOrders()
+	));
+});
+
+$app->get('/profile/orders/:idorder', function($idorder) {
+	User::verifyLogin(false);
+
+	$order = new Order();
+	$order->get((int)$idorder);
+
+	$cart = new Cart();
+	$cart->get((int)$order->getidcart());
+	$cart->getCalculateTotal();
+
+	$page = new Page();
+	$page->setTpl("profile-orders-detail", array(
+		"order"=>$order->getValues(),
+		"cart"=>$cart->getValues(),
+		"products"=>$cart->getProducts()
+	));
 });
 
 ?>
