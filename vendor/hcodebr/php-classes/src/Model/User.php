@@ -320,7 +320,7 @@ class User extends Model
 	public static function getSuccess()
 	{
 		$msg = (isset($_SESSION[User::SUCCESS]) && $_SESSION[User::SUCCESS]) ? $_SESSION[User::SUCCESS] : "";
-		User::clearError();
+		User::clearSuccess();
 		return $msg;
 	}
 
